@@ -36,6 +36,15 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public User updateUser(Long id, User user) {
+        User oldUser = unwrapUser(userRepository.findById(id));
+        oldUser.setUserName(user.getUserName());
+        oldUser.setEmail(user.getEmail());
+        oldUser.setPassword(user.getPassword());
+        return userRepository.save(oldUser);
+    }
+
+    @Override
     public List<User> getUsers() {
         return (List<User>)userRepository.findAll();
     }

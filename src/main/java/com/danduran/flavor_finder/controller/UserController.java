@@ -8,7 +8,9 @@ import com.danduran.flavor_finder.service.UserService;
 
 import lombok.AllArgsConstructor;
 
+import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,8 +45,15 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //Update
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+        return new ResponseEntity<>(userService.updateUser(id, user), HttpStatus.OK);
+    }
 
-    //Get all users
+    @GetMapping("/list")
+    public ResponseEntity<List<User>> getUsers() {
+        return new ResponseEntity<>(userService.getUsers(), HttpStatus.OK);
+    }
+    
     
 }
