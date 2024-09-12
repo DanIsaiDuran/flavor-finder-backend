@@ -3,9 +3,13 @@ package com.danduran.flavor_finder.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.danduran.flavor_finder.controller.dto.AuthLoginRequest;
+import com.danduran.flavor_finder.controller.dto.AuthResponse;
 import com.danduran.flavor_finder.model.UserEntity;
+import com.danduran.flavor_finder.service.UserDetailServiceImpl;
 import com.danduran.flavor_finder.service.UserService;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -27,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class UserController {
 
     UserService userService;
+    private UserDetailServiceImpl userDetailService;
     
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
@@ -37,6 +42,11 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserEntity> saveUser(@RequestBody UserEntity user) {
         return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
+    }
+    
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody @Valid AuthLoginRequest userRequest) {
+        return new ResponseEntity<>(this.userDetailService.loginUser(userRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

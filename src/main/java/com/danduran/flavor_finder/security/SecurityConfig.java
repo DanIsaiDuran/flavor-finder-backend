@@ -40,6 +40,10 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
         .httpBasic(Customizer.withDefaults())
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(http -> {
+            http.requestMatchers(HttpMethod.POST, "/user/**").permitAll();
+            http.requestMatchers(HttpMethod.GET, "/user/**").permitAll();
+        })
         .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
         .build();
     }
