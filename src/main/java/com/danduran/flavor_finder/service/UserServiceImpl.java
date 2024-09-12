@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.danduran.flavor_finder.model.User;
+import com.danduran.flavor_finder.model.UserEntity;
 import com.danduran.flavor_finder.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
@@ -15,42 +15,42 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService{
 
-    private UserRepository userRepository;
+    private UserRepository UserRepository;
     //private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public User createUser(User user) {
-        //user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+    public UserEntity createUser(UserEntity UserEntity) {
+        //UserEntity.setPassword(bCryptPasswordEncoder.encode(UserEntity.getPassword()));
+        return UserRepository.save(UserEntity);
     }
 
     @Override
-    public User getUser(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        return unwrapUser(user);
+    public UserEntity getUser(Long id) {
+        Optional<UserEntity> UserEntity = UserRepository.findById(id);
+        return unwrapUserEntity(UserEntity);
     }
 
     @Override
     public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+        UserRepository.deleteById(id);
     }
 
     @Override
-    public User updateUser(Long id, User user) {
-        User oldUser = unwrapUser(userRepository.findById(id));
+    public UserEntity updateUser(Long id, UserEntity user) {
+        UserEntity oldUser = unwrapUserEntity(UserRepository.findById(id));
         oldUser.setUserName(user.getUserName());
         oldUser.setEmail(user.getEmail());
         oldUser.setPassword(user.getPassword());
-        return userRepository.save(oldUser);
+        return UserRepository.save(oldUser);
     }
 
     @Override
-    public List<User> getUsers() {
-        return (List<User>)userRepository.findAll();
+    public List<UserEntity> getUsers() {
+        return (List<UserEntity>)UserRepository.findAll();
     }
 
 
-    private User unwrapUser(Optional<User> entity){
+    private UserEntity unwrapUserEntity(Optional<UserEntity> entity){
         if (entity.isPresent()) return entity.get();
         else throw new RuntimeException("Usuario no encontrado");
     }
