@@ -41,8 +41,10 @@ public class SecurityConfig {
         .httpBasic(Customizer.withDefaults())
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(http -> {
-            http.requestMatchers(HttpMethod.POST, "/user/**").permitAll();
-            http.requestMatchers(HttpMethod.GET, "/user/**").permitAll();
+            http.requestMatchers(HttpMethod.POST, "/api/v1/user/**").permitAll();
+            http.requestMatchers(HttpMethod.GET, "/api/v1/user/**").permitAll();
+            http.requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll();
+
         })
         .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
         .build();

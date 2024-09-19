@@ -87,7 +87,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         String email = authCreateUser.email();
         String password = authCreateUser.password();
         List<String> roles = authCreateUser.roleRequest().roleListName();
-        Set<Role> rolesSet = roleRepository.findRoleByNameIn(roles).stream().collect(Collectors.toSet()) ;
+        Set<Role> rolesSet = roleRepository.findRoleByNameIn(roles).stream().collect(Collectors.toSet());
 
         UserEntity user = UserEntity.builder()
         .userName(username)
