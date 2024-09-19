@@ -27,6 +27,10 @@ public class FlavorFinderApplication {
 			.name("ADMIN")
 			.build();
 
+			Role roleUser = Role.builder()
+			.name("USER")
+			.build();
+
 			UserEntity userAdmin = UserEntity.builder()
 			.userName("admin")
 			.password(new BCryptPasswordEncoder().encode("1234"))
