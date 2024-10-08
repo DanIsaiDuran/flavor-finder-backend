@@ -3,6 +3,8 @@ package com.danduran.flavor_finder.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.danduran.flavor_finder.exception.RecipeNotFoundException;
+import com.danduran.flavor_finder.exception.UserNotFoundException;
 import com.danduran.flavor_finder.model.Recipe;
 import com.danduran.flavor_finder.service.RecipeService;
 
@@ -31,12 +33,12 @@ public class RecipeController {
     RecipeService recipeService;
 
     @PostMapping("/{user_id}")
-    public ResponseEntity<Recipe> createRecipe(@RequestBody @Valid Recipe recipe, @PathVariable Long user_id) {
+    public ResponseEntity<Recipe> createRecipe(@RequestBody @Valid Recipe recipe, @PathVariable Long user_id) throws UserNotFoundException {
         return new ResponseEntity<>(recipeService.createRecipe(recipe, user_id), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Recipe> getRecipe(@PathVariable Long id) {
+    public ResponseEntity<Recipe> getRecipe(@PathVariable Long id) throws RecipeNotFoundException {
         return new ResponseEntity<>(recipeService.getRecipe(id), HttpStatus.FOUND);
     }
     
@@ -48,7 +50,7 @@ public class RecipeController {
     }
     
     @PutMapping("update/{id}")
-    public ResponseEntity<Recipe> updateRecipe(@PathVariable Long id, @RequestBody Recipe recipe) {
+    public ResponseEntity<Recipe> updateRecipe(@PathVariable Long id, @RequestBody Recipe recipe) throws RecipeNotFoundException {
         return new ResponseEntity<>(recipeService.updateRecipe(recipe, id), HttpStatus.OK);
     }
 
@@ -58,7 +60,7 @@ public class RecipeController {
     }
 
     @GetMapping("/find-by-name/{name}")
-    public ResponseEntity<Recipe> getRecipeByName(@PathVariable String name) {
+    public ResponseEntity<Recipe> getRecipeByName(@PathVariable String name) throws RecipeNotFoundException {
         return new ResponseEntity<>(recipeService.getRecipeByName(name), HttpStatus.FOUND);
     }
     

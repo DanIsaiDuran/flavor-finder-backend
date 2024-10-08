@@ -3,9 +3,11 @@ package com.danduran.flavor_finder.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.stereotype.Service;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import com.danduran.flavor_finder.exception.UserNotFoundException;
 import com.danduran.flavor_finder.model.UserEntity;
 import com.danduran.flavor_finder.repository.UserRepository;
 
@@ -20,12 +22,12 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserEntity createUser(UserEntity UserEntity) {
-        //UserEntity.setPassword(bCryptPasswordEncoder.encode(UserEntity.getPassword()));
+        UserEntity.setPassword(new BCryptPasswordEncoder().encode(UserEntity.getPassword()));
         return UserRepository.save(UserEntity);
     }
 
     @Override
-    public UserEntity getUser(Long id) {
+    public UserEntity getUser(Long id) throws UserNotFoundException{
         Optional<UserEntity> UserEntity = UserRepository.findById(id);
         return unwrapUserEntity(UserEntity);
     }
@@ -36,7 +38,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserEntity updateUser(Long id, UserEntity user) {
+    public UserEntity updateUser(Long id, UserEntity user) throws UserNotFoundException {
         UserEntity oldUser = unwrapUserEntity(UserRepository.findById(id));
         oldUser.setUserName(user.getUserName());
         oldUser.setEmail(user.getEmail());
@@ -50,8 +52,8 @@ public class UserServiceImpl implements UserService{
     }
 
 
-    private UserEntity unwrapUserEntity(Optional<UserEntity> entity){
+    private UserEntity unwrapUserEntity(Optional<UserEntity> entity) throws UserNotFoundException {
         if (entity.isPresent()) return entity.get();
-        else throw new RuntimeException("Usuario no encontrado");
+        else throw new UserNotFoundException("Usuario no encontrado");
     }
 }
