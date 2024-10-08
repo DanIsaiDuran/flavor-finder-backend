@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.danduran.flavor_finder.exception.RecipeNotFoundException;
+import com.danduran.flavor_finder.exception.UserNotFoundException;
 import com.danduran.flavor_finder.model.Recipe;
 import com.danduran.flavor_finder.model.UserEntity;
 import com.danduran.flavor_finder.repository.RecipeRepository;
@@ -19,9 +21,9 @@ public class RecipeServiceImpl implements RecipeService {
     UserRepository userRepository;
 
     @Override
-    public Recipe createRecipe(Recipe recipe, Long id) {
+    public Recipe createRecipe(Recipe recipe, Long id) throws UserNotFoundException {
         //TO-DO: Create DTO to catch recipe creation request
-        UserEntity user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found, recipe couldn't be created"));
+        UserEntity user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found, recipe couldn't be created"));
         Recipe recipeCreated = Recipe.builder()
         .name(recipe.getName())
         .description(recipe.getDescription())
@@ -37,8 +39,8 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe getRecipe(Long id) {
-        Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    public Recipe getRecipe(Long id) throws RecipeNotFoundException {
+        Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new RecipeNotFoundException("User not found"));
         return recipe;
     }
 
@@ -48,8 +50,8 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe updateRecipe(Recipe recipe, Long id) {
-        Recipe recipeOld = recipeRepository.findById(id).orElseThrow(()-> new RuntimeException("User not found"));
+    public Recipe updateRecipe(Recipe recipe, Long id) throws RecipeNotFoundException {
+        Recipe recipeOld = recipeRepository.findById(id).orElseThrow(()-> new RecipeNotFoundException("Receta no encontrada"));
         recipeOld.setName(recipe.getName());
         recipeOld.setDescription(recipe.getDescription());
         recipeOld.setSteps(recipe.getSteps());
@@ -66,8 +68,8 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe getRecipeByName(String name) {
-        Recipe recipe = recipeRepository.findRecipeByName(name).orElseThrow(()-> new RuntimeException("User not found"));
+    public Recipe getRecipeByName(String name) throws RecipeNotFoundException {
+        Recipe recipe = recipeRepository.findRecipeByName(name).orElseThrow(()-> new RecipeNotFoundException("Receta no ecnontrada"));
         return recipe;
     }
 }
