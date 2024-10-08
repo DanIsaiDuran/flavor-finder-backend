@@ -3,6 +3,7 @@ package com.danduran.flavor_finder.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.danduran.flavor_finder.exception.UserNotFoundException;
 import com.danduran.flavor_finder.model.UserEntity;
 
 import com.danduran.flavor_finder.service.UserService;
@@ -31,7 +32,7 @@ public class UserController {
     
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserEntity> getUser(@PathVariable Long id) {
+    public ResponseEntity<UserEntity> getUser(@PathVariable Long id) throws UserNotFoundException {
         return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
     }
 
@@ -47,7 +48,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserEntity> updateUser(@PathVariable Long id, @RequestBody UserEntity user) {
+    public ResponseEntity<UserEntity> updateUser(@PathVariable Long id, @RequestBody UserEntity user) throws UserNotFoundException {
         return new ResponseEntity<>(userService.updateUser(id, user), HttpStatus.OK);
     }
 
