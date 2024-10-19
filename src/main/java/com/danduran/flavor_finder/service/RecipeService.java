@@ -13,4 +13,5 @@ public interface RecipeService {
     Recipe updateRecipe(Recipe recipe, Long id) throws RecipeNotFoundException;
     List<Recipe> getBestFiveRecipes();
     Recipe getRecipeByName(String name) throws RecipeNotFoundException;
+    List<Recipe> getUserRecipes(Long userId);
 }

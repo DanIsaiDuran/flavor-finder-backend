@@ -64,5 +64,9 @@ public class RecipeController {
         return new ResponseEntity<>(recipeService.getRecipeByName(name), HttpStatus.FOUND);
     }
     
+    @GetMapping("/list/user/{user_id}")
+    public ResponseEntity<List<Recipe>> getUserRecipes(@PathVariable Long user_id) {
+        return new ResponseEntity<>(recipeService.getUserRecipes(user_id), HttpStatus.FOUND);
+    }
     
 }
