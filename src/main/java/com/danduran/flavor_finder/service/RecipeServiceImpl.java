@@ -72,4 +72,9 @@ public class RecipeServiceImpl implements RecipeService {
         Recipe recipe = recipeRepository.findRecipeByName(name).orElseThrow(()-> new RecipeNotFoundException("Receta no ecnontrada"));
         return recipe;
     }
+
+    @Override
+    public List<Recipe> getUserRecipes(Long userId) {
+        return recipeRepository.findByUserId(userId);
+    }
 }

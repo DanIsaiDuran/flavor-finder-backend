@@ -39,20 +39,24 @@ public class Recipe {
     private Long id;
 
     @NonNull
+    @NotBlank
     @Column(unique = true)
     private String name;
 
     @NonNull
+    @NotBlank
     @Lob
     @Column(name="description", length=512)
     private String description;
 
     @NonNull
+    @NotBlank
     @Lob
     @Column(name="steps", length=512)
     private String steps;
 
     @NonNull
+    @NotBlank
     @Lob
     @Column(name="ingredients", length=512)
     private String ingredients;
