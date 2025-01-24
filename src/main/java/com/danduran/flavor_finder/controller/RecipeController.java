@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "*")
 @RequestMapping("api/v1/recipe")
 public class RecipeController {
     RecipeService recipeService;
@@ -56,17 +58,17 @@ public class RecipeController {
 
     @GetMapping("/best-five")
     public ResponseEntity<List<Recipe>> getBestFiveRecipes() {
-        return new ResponseEntity<>(recipeService.getBestFiveRecipes(), HttpStatus.FOUND);
+        return new ResponseEntity<>(recipeService.getBestFiveRecipes(), HttpStatus.OK);
     }
 
     @GetMapping("/find-by-name/{name}")
     public ResponseEntity<Recipe> getRecipeByName(@PathVariable String name) throws RecipeNotFoundException {
-        return new ResponseEntity<>(recipeService.getRecipeByName(name), HttpStatus.FOUND);
+        return new ResponseEntity<>(recipeService.getRecipeByName(name), HttpStatus.OK);
     }
     
     @GetMapping("/list/user/{user_id}")
     public ResponseEntity<List<Recipe>> getUserRecipes(@PathVariable Long user_id) {
-        return new ResponseEntity<>(recipeService.getUserRecipes(user_id), HttpStatus.FOUND);
+        return new ResponseEntity<>(recipeService.getUserRecipes(user_id), HttpStatus.OK);
     }
     
 }

@@ -75,6 +75,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public List<Recipe> getUserRecipes(Long userId) {
+        //TODO: validate if user exists
         return recipeRepository.findByUserId(userId);
     }
 }
