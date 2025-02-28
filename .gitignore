@@ -5,11 +5,12 @@ target/
 !**/src/test/**/target/
 
 # Environment & Config Files
-application.properties
 application.yml
 application-dev.properties
 application-prod.properties
 .env
+docker-compose.yml
+DockerFile
 
 ### STS ###
 .apt_generated
