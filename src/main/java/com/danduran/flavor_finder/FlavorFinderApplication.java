@@ -20,7 +20,7 @@ public class FlavorFinderApplication {
 		SpringApplication.run(FlavorFinderApplication.class, args);
 	}
 
-	@Bean
+	/* @Bean
 	CommandLineRunner init(UserRepository userRepository){
 		return args -> {
 			Role roleAdmin = Role.builder()
@@ -44,6 +44,6 @@ public class FlavorFinderApplication {
 
 			userRepository.saveAll(List.of(userAdmin));
 		};
-	}
+	} */
 
 }

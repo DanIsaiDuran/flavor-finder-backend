@@ -4,6 +4,14 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Environment & Config Files
+application.yml
+application-dev.properties
+application-prod.properties
+.env
+docker-compose.yml
+DockerFile
+
 ### STS ###
 .apt_generated
 .classpath
