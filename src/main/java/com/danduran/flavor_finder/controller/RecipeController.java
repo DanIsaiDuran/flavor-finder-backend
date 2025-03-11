@@ -29,7 +29,6 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin(origins = "*")
 @RequestMapping("api/v1/recipe")
 public class RecipeController {
     RecipeService recipeService;
@@ -41,7 +40,7 @@ public class RecipeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Recipe> getRecipe(@PathVariable Long id) throws RecipeNotFoundException {
-        return new ResponseEntity<>(recipeService.getRecipe(id), HttpStatus.FOUND);
+        return new ResponseEntity<>(recipeService.getRecipe(id), HttpStatus.OK);
     }
     
     @PreAuthorize("hasRole('ADMIN')")
