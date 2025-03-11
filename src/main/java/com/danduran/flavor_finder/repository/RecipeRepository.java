@@ -11,4 +11,5 @@ import com.danduran.flavor_finder.model.Recipe;
 public interface RecipeRepository extends CrudRepository<Recipe, Long>{
     Optional<Recipe> findRecipeByName(String name);
     List<Recipe> findByUserId(Long userId);
+    List<Recipe> findTop6ByOrderByIdAsc();
 }

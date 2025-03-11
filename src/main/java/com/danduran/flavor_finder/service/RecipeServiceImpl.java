@@ -64,7 +64,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public List<Recipe> getBestFiveRecipes() {
-        return (List<Recipe>)recipeRepository.findAll();
+        return (List<Recipe>)recipeRepository.findTop6ByOrderByIdAsc();
     }
 
     @Override
