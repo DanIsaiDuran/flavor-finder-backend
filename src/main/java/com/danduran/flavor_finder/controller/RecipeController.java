@@ -33,6 +33,11 @@ import java.util.List;
 public class RecipeController {
     RecipeService recipeService;
 
+    @GetMapping
+    public ResponseEntity<List<Recipe>> findAll (@RequestParam(required = false) Integer difficulty, @RequestParam(required = false) Integer maxPreparationTime) {
+        return new ResponseEntity<>(recipeService.getAll(difficulty, maxPreparationTime), HttpStatus.OK);
+    }
+    
     @PostMapping("/{user_id}")
     public ResponseEntity<Recipe> createRecipe(@RequestBody @Valid Recipe recipe, @PathVariable Long user_id) throws UserNotFoundException {
         return new ResponseEntity<>(recipeService.createRecipe(recipe, user_id), HttpStatus.CREATED);
