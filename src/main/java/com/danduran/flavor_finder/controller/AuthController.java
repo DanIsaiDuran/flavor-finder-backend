@@ -18,7 +18,6 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin(origins = "*")
 @RequestMapping("api/v1/auth")
 public class AuthController {
 
@@ -30,8 +29,7 @@ public class AuthController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<AuthResponse> register(@RequestBody @Valid AuthCreateUser authCreateUser) {
-        
+    public ResponseEntity<AuthResponse> register(@RequestBody @Valid AuthCreateUser authCreateUser) {    
         return new ResponseEntity<>(this.userDetailService.createUser(authCreateUser), HttpStatus.CREATED);
     }
 }

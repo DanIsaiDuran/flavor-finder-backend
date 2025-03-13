@@ -10,6 +10,7 @@ import com.danduran.flavor_finder.model.Recipe;
 import com.danduran.flavor_finder.model.UserEntity;
 import com.danduran.flavor_finder.repository.RecipeRepository;
 import com.danduran.flavor_finder.repository.UserRepository;
+import com.danduran.flavor_finder.specification.RecipeSpecification;
 
 import lombok.AllArgsConstructor;
 
@@ -64,7 +65,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public List<Recipe> getBestFiveRecipes() {
-        return (List<Recipe>)recipeRepository.findAll();
+        return (List<Recipe>)recipeRepository.findTop6ByOrderByIdAsc();
     }
 
     @Override
@@ -77,5 +78,11 @@ public class RecipeServiceImpl implements RecipeService {
     public List<Recipe> getUserRecipes(Long userId) {
         //TODO: validate if user exists
         return recipeRepository.findByUserId(userId);
+    }
+
+    @Override
+    public List<Recipe> getAll(Integer difficulty, Integer maxPreparationTime) {
+        RecipeSpecification spec = new RecipeSpecification(difficulty, maxPreparationTime);
+        return recipeRepository.findAll(spec);
     }
 }

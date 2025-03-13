@@ -29,11 +29,15 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin(origins = "*")
 @RequestMapping("api/v1/recipe")
 public class RecipeController {
     RecipeService recipeService;
 
+    @GetMapping
+    public ResponseEntity<List<Recipe>> findAll (@RequestParam(required = false) Integer difficulty, @RequestParam(required = false) Integer maxPreparationTime) {
+        return new ResponseEntity<>(recipeService.getAll(difficulty, maxPreparationTime), HttpStatus.OK);
+    }
+    
     @PostMapping("/{user_id}")
     public ResponseEntity<Recipe> createRecipe(@RequestBody @Valid Recipe recipe, @PathVariable Long user_id) throws UserNotFoundException {
         return new ResponseEntity<>(recipeService.createRecipe(recipe, user_id), HttpStatus.CREATED);
@@ -41,7 +45,7 @@ public class RecipeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Recipe> getRecipe(@PathVariable Long id) throws RecipeNotFoundException {
-        return new ResponseEntity<>(recipeService.getRecipe(id), HttpStatus.FOUND);
+        return new ResponseEntity<>(recipeService.getRecipe(id), HttpStatus.OK);
     }
     
     @PreAuthorize("hasRole('ADMIN')")
