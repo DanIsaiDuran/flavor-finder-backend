@@ -29,6 +29,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin(origins = "*")
 @RequestMapping("api/v1/recipe")
 public class RecipeController {
     RecipeService recipeService;
