@@ -13,4 +13,5 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long>, JpaSpeci
     Optional<Recipe> findRecipeByName(String name);
     List<Recipe> findByUserId(Long userId);
     List<Recipe> findTop6ByOrderByIdAsc();
+    Boolean existsByName(String name);
 }
