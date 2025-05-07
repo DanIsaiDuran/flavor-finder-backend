@@ -1,6 +1,7 @@
 package com.danduran.flavor_finder.exception;
 
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -42,6 +43,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         });
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        String message = ex.getMostSpecificCause().getMessage();
+
+        if (message.contains("recipes.")) {
+            return ResponseEntity.badRequest().body("Ya existe una receta con ese nombre.");
+        }
+
+        return ResponseEntity.badRequest().body("Error de integridad en la base de datos.");
     }
 
 }

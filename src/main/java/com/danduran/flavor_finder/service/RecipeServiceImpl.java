@@ -2,6 +2,9 @@ package com.danduran.flavor_finder.service;
 
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.danduran.flavor_finder.exception.RecipeNotFoundException;
@@ -22,9 +25,11 @@ public class RecipeServiceImpl implements RecipeService {
     UserRepository userRepository;
 
     @Override
-    public Recipe createRecipe(Recipe recipe, Long id) throws UserNotFoundException {
+    public Recipe createRecipe(Recipe recipe) throws UserNotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loggedUsername = authentication.getName();
+        UserEntity user = userRepository.findUserByUserName(loggedUsername).orElseThrow(() -> new UserNotFoundException("User not found, recipe couldn't be created"));      
         //TO-DO: Create DTO to catch recipe creation request
-        UserEntity user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found, recipe couldn't be created"));
         Recipe recipeCreated = Recipe.builder()
         .name(recipe.getName())
         .description(recipe.getDescription())

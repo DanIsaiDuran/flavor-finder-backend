@@ -39,9 +39,10 @@ public class RecipeController {
         return new ResponseEntity<>(recipeService.getAll(difficulty, maxPreparationTime), HttpStatus.OK);
     }
     
-    @PostMapping("/{user_id}")
-    public ResponseEntity<Recipe> createRecipe(@RequestBody @Valid Recipe recipe, @PathVariable Long user_id) throws UserNotFoundException {
-        return new ResponseEntity<>(recipeService.createRecipe(recipe, user_id), HttpStatus.CREATED);
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping
+    public ResponseEntity<Recipe> createRecipe(@RequestBody @Valid Recipe recipe) throws UserNotFoundException {
+        return new ResponseEntity<>(recipeService.createRecipe(recipe), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
