@@ -49,11 +49,9 @@ public class SecurityConfig {
         .authorizeHttpRequests(http -> {
             http.requestMatchers(HttpMethod.POST, "/api/v1/user/**").permitAll();
             http.requestMatchers(HttpMethod.GET, "/api/v1/user/**").permitAll();
-            http.requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll();
-            http.requestMatchers(HttpMethod.POST, "/api/v1/recipe/**").permitAll();
+            http.requestMatchers("/api/v1/auth/**").permitAll();
             http.requestMatchers(HttpMethod.GET, "/api/v1/recipe/**").permitAll();
-            http.requestMatchers(HttpMethod.DELETE, "/api/v1/recipe/**").permitAll();
-            http.requestMatchers(HttpMethod.PUT, "/api/v1/recipe/**").permitAll();
+            http.anyRequest().authenticated();
         })
         .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
         .build();
