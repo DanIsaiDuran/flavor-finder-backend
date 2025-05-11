@@ -8,4 +8,6 @@ import com.danduran.flavor_finder.model.UserEntity;
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
 
     Optional<UserEntity> findUserByUserName(String username);
+    Boolean existsByUserName(String username);
+    Boolean existsByEmail(String email);
 }
