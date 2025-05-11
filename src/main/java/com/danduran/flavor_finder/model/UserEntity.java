@@ -37,7 +37,7 @@ public class UserEntity {
 
     @NotBlank
     @NotNull
-    @Column(name = "user_name")
+    @Column(name = "user_name", unique = true)
     private String userName;
 
     @NotBlank
@@ -47,6 +47,7 @@ public class UserEntity {
     @NotBlank
     @NotNull
     @Email
+    @Column(unique = true)
     private String email;
 
     @Column(name = "is_enabled")
