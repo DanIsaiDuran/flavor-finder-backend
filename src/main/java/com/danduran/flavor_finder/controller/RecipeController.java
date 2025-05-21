@@ -11,6 +11,10 @@ import com.danduran.flavor_finder.service.RecipeService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +39,14 @@ public class RecipeController {
     RecipeService recipeService;
 
     @GetMapping
-    public ResponseEntity<List<Recipe>> findAll (@RequestParam(required = false) Integer difficulty, @RequestParam(required = false) Integer maxPreparationTime) {
-        return new ResponseEntity<>(recipeService.getAll(difficulty, maxPreparationTime), HttpStatus.OK);
+    public ResponseEntity<Page<Recipe>> findAll (@RequestParam(required = false) Integer difficulty, 
+    @RequestParam(required = false) Integer maxPreparationTime,
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "5") int size,
+    @RequestParam(defaultValue = "id") String sortBy
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        return new ResponseEntity<>(recipeService.getAll(difficulty, maxPreparationTime, pageable), HttpStatus.OK);
     }
     
     @PreAuthorize("isAuthenticated()")
