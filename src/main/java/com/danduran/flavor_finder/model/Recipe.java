@@ -63,7 +63,7 @@ public class Recipe {
 
     @NonNull
     @Column(name = "difficulty")
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.ORDINAL) //change to string EnumType.STRING
     private DifficultyEnum difficulty;
 
     @Column(name = "preparation_time")

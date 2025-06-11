@@ -17,5 +17,5 @@ public interface RecipeService {
     List<Recipe> getBestFiveRecipes();
     Recipe getRecipeByName(String name) throws RecipeNotFoundException;
     List<Recipe> getUserRecipes(Long userId);
-    Page<Recipe> getAll(Integer difficulty, Integer maxPreparationTime, Pageable pageable);
+    Page<Recipe> getAll(Integer difficulty, Integer maxPreparationTime, String word, Pageable pageable);
 }

@@ -42,11 +42,12 @@ public class RecipeController {
     public ResponseEntity<Page<Recipe>> findAll (@RequestParam(required = false) Integer difficulty, 
     @RequestParam(required = false) Integer maxPreparationTime,
     @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "5") int size,
-    @RequestParam(defaultValue = "id") String sortBy
+    @RequestParam(defaultValue = "5") int size,    
+    @RequestParam(defaultValue = "id") String sortBy,
+    @RequestParam(required = false) String word
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-        return new ResponseEntity<>(recipeService.getAll(difficulty, maxPreparationTime, pageable), HttpStatus.OK);
+        return new ResponseEntity<>(recipeService.getAll(difficulty, maxPreparationTime, word, pageable), HttpStatus.OK);
     }
     
     @PreAuthorize("isAuthenticated()")

@@ -16,13 +16,15 @@ public class RecipeSpecification implements Specification<Recipe> {
 
     private Integer difficulty;
     private Integer maxPreparationTime;
+    private String word;
 
     public RecipeSpecification() {
     }
 
-    public RecipeSpecification(Integer difficulty, Integer maxPreparationTime) {
+    public RecipeSpecification(Integer difficulty, Integer maxPreparationTime, String word) {
         this.difficulty = difficulty;
         this.maxPreparationTime = maxPreparationTime;
+        this.word = word;
     }
 
     @Override
@@ -35,6 +37,10 @@ public class RecipeSpecification implements Specification<Recipe> {
 
         if(maxPreparationTime != null){
             predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("preparationTime"), maxPreparationTime));
+        }
+
+        if(word != null){
+            predicates.add(criteriaBuilder.like(root.get("name"), "%"+word+"%"));
         }
 
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
