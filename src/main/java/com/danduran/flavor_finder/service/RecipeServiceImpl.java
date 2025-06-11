@@ -88,8 +88,8 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Page<Recipe> getAll(Integer difficulty, Integer maxPreparationTime, Pageable pageable) {
-        RecipeSpecification spec = new RecipeSpecification(difficulty, maxPreparationTime);
+    public Page<Recipe> getAll(Integer difficulty, Integer maxPreparationTime, String word, Pageable pageable) {
+        RecipeSpecification spec = new RecipeSpecification(difficulty, maxPreparationTime, word);
         return recipeRepository.findAll(spec, pageable);
     }
 }
