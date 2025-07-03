@@ -2,6 +2,7 @@ package com.danduran.flavor_finder.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.danduran.flavor_finder.exception.RecipeNotFoundException;
 import com.danduran.flavor_finder.exception.UserNotFoundException;
@@ -9,6 +10,7 @@ import com.danduran.flavor_finder.model.Recipe;
 import com.danduran.flavor_finder.service.RecipeService;
 
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.AllArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -27,6 +29,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+
 import java.util.List;
 
 
@@ -52,8 +56,9 @@ public class RecipeController {
     
     @PreAuthorize("isAuthenticated()")
     @PostMapping
-    public ResponseEntity<Recipe> createRecipe(@RequestBody @Valid Recipe recipe) throws UserNotFoundException {
-        return new ResponseEntity<>(recipeService.createRecipe(recipe), HttpStatus.CREATED);
+    public ResponseEntity<Recipe> createRecipe(@RequestPart @Valid Recipe recipe, 
+    @RequestPart(value = "image", required = false) MultipartFile image) throws UserNotFoundException {
+        return new ResponseEntity<>(recipeService.createRecipe(recipe, image), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -63,14 +68,16 @@ public class RecipeController {
     
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteRecipe(@PathVariable Long id) {
+    public ResponseEntity<HttpStatus> deleteRecipe(@PathVariable Long id) throws RecipeNotFoundException {
         recipeService.deleteRecipe(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     
     @PutMapping("update/{id}")
-    public ResponseEntity<Recipe> updateRecipe(@PathVariable Long id, @RequestBody Recipe recipe) throws RecipeNotFoundException {
-        return new ResponseEntity<>(recipeService.updateRecipe(recipe, id), HttpStatus.OK);
+    public ResponseEntity<Recipe> updateRecipe(@PathVariable Long id, 
+    @RequestPart Recipe recipe, 
+    @RequestPart MultipartFile image) throws RecipeNotFoundException {
+        return new ResponseEntity<>(recipeService.updateRecipe(recipe, id, image), HttpStatus.OK);
     }
 
     @GetMapping("/best-five")
