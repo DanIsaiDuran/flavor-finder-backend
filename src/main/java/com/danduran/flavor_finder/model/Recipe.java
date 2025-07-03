@@ -21,6 +21,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -76,6 +77,12 @@ public class Recipe {
     @Lob
     @Column(name="tools", length=512)
     private String tools;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @Column(name = "image_filename")
+    private String imageFilename;
 
     @JsonIgnore
     @ManyToOne
