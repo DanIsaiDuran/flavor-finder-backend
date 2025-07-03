@@ -8,7 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.danduran.flavor_finder.exception.FileProcessingException;
 import com.danduran.flavor_finder.exception.RecipeNotFoundException;
 import com.danduran.flavor_finder.exception.UserNotFoundException;
 import com.danduran.flavor_finder.model.Recipe;
@@ -25,9 +27,10 @@ public class RecipeServiceImpl implements RecipeService {
 
     RecipeRepository recipeRepository;
     UserRepository userRepository;
+    FileService fileService;
 
     @Override
-    public Recipe createRecipe(Recipe recipe) throws UserNotFoundException {
+    public Recipe createRecipe(Recipe recipe, MultipartFile image) throws UserNotFoundException, FileProcessingException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String loggedUsername = authentication.getName();
         UserEntity user = userRepository.findUserByUserName(loggedUsername).orElseThrow(() -> new UserNotFoundException("User not found, recipe couldn't be created"));      
@@ -43,6 +46,17 @@ public class RecipeServiceImpl implements RecipeService {
         .tools(recipe.getTools())
         .user(user)
         .build();
+
+        if (image != null && !image.isEmpty()) {
+            try {
+                String fileName = fileService.saveFile(image);
+                recipeCreated.setImageFilename(fileName);
+                recipeCreated.setImageUrl("/uploads/"+fileName);
+            } catch (Exception e) {
+                throw new FileProcessingException("Error al guardar la imagen: " + e.getMessage(), e);
+            }
+            
+        }
         return recipeRepository.save(recipeCreated);
     }
 
@@ -53,12 +67,16 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public void deleteRecipe(Long id) {
+    public void deleteRecipe(Long id) throws RecipeNotFoundException {
+        Recipe recipe = recipeRepository.findById(id).orElseThrow(()-> new RecipeNotFoundException("Receta no encontrada"));
+        if(recipe.getImageFilename() != null) {
+            fileService.deleteFile(recipe.getImageFilename());
+        }
         recipeRepository.deleteById(id);
     }
 
     @Override
-    public Recipe updateRecipe(Recipe recipe, Long id) throws RecipeNotFoundException {
+    public Recipe updateRecipe(Recipe recipe, Long id, MultipartFile image) throws RecipeNotFoundException, FileProcessingException {
         Recipe recipeOld = recipeRepository.findById(id).orElseThrow(()-> new RecipeNotFoundException("Receta no encontrada"));
         recipeOld.setName(recipe.getName());
         recipeOld.setDescription(recipe.getDescription());
@@ -67,6 +85,20 @@ public class RecipeServiceImpl implements RecipeService {
         recipeOld.setPreparationTime(recipe.getPreparationTime());
         recipeOld.setStatus(recipe.getStatus());
         recipeOld.setTools(recipe.getTools());
+
+        if(image != null && !image.isEmpty()){
+            try {
+                if(recipeOld.getImageFilename() != null){
+                    fileService.deleteFile(recipeOld.getImageFilename());
+                }
+
+                String fileName = fileService.saveFile(image);
+                recipeOld.setImageFilename(fileName);
+                recipeOld.setImageUrl("/uploads/"+fileName);
+            } catch (Exception e) {
+                throw new FileProcessingException("Error al guardar la imagen: " + e.getMessage(), e);
+            }
+        }
         return recipeRepository.save(recipeOld);
     }
 
